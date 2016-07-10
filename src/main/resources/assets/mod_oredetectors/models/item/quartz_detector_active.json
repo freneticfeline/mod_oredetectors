@@ -1,0 +1,7 @@
+{
+    "parent":"mod_oredetectors:item/standard_item",
+    "textures": {
+        "layer0":"mod_oredetectors:items/detector.quartz",
+        "layer1":"mod_oredetectors:items/detector_active"
+    }
+}

@@ -1,0 +1,16 @@
+[
+{
+  "modid": "mod_oredetectors",
+  "name": "Ore Detectors Forge Mod",
+  "description": "Provides new items for detecting ore blocks.",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["FreneticFeline"],
+  "credits": "The Forge and FML team.",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
