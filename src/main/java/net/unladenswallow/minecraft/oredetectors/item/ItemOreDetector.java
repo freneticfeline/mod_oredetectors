@@ -93,8 +93,6 @@ public class ItemOreDetector extends Item {
 //								+ "\n\tnearest block pitch/yaw = " + pitchToBlock(player.getPosition().up(), nearestMatchingPos) + " / " + yawToBlock(player.getPosition().up(), nearestMatchingPos)
 //								, event.side);
 						player.playSound(ModOreDetectors.MODID + ":oreDetectorPing", volumeFromDistance(distSq) * 2.0f, 1.0f);
-//						player.worldObj.playSoundAtEntity(player, 
-//								ModOreDetectors.MODID + ":oreDetectorPing", volumeFromDistance(distSq) * 2.0f, 1.0f);
 						tickOfLastPing = player.worldObj.getWorldTime();
 						this.currentModel = this.activeModel;
 					}
@@ -142,24 +140,6 @@ public class ItemOreDetector extends Item {
 		}
 	}
 
-/*	private boolean detectorInHotbar(EntityPlayer player) {
-		InventoryPlayer inventory = player.inventory;
-		// To save time, first check the last place we saw a detector
-		if (inventory.mainInventory[slotDetectorLastSeen] != null && inventory.mainInventory[slotDetectorLastSeen].getItem() == this) {
-//			FFLogger.info("Found detector in the last place we saw it");
-			return true;
-		}
-		for (int i = 0; i < 9; i++) {
-			ItemStack curItemStack = inventory.mainInventory[i];
-			if (curItemStack != null && curItemStack.getItem() == this) {
-				slotDetectorLastSeen = i;
-//				FFLogger.info("Found detector in slot " + i);
-				return true;
-			}
-		}
-		return false;
-	}
-*/	
 	private boolean detectorInInventory(EntityPlayer player) {
 		InventoryPlayer inventory = player.inventory;
 		// To save time, first check the last place we saw a detector
@@ -204,30 +184,6 @@ public class ItemOreDetector extends Item {
 						);
 	}
 
-/*	private float soundPitchFromDirection(float playerPitch, float playerYaw, float blockPitch, float blockYaw) {
-		float dP = Math.abs(playerPitch - blockPitch);
-		float dY = Math.abs((playerYaw % 360) - (blockYaw % 360));
-		if (dY > 180.0) {
-			dY = Math.abs(360.0f - dY);
-		}
-//		FFLogger.info("OreDetectorWorker pitchFromDirection: dP / dY = " + dP + " / " + dY);
-		if (dP < 15 && dY < 10) {
-			return 2.0f;
-		} else if (dP < 20 && dY < 20) {
-			return 1.8f;
-		} else if (dP < 25 && dY < 30) {
-			return 1.6f;
-		} else if (dP < 30 && dY < 40) {
-			return 1.4f;
-		} else if (dP < 35 && dY < 50) {
-			return 1.2f;
-		} else if (dP < 40 && dY < 60) {
-			return 1.0f;
-		} else {
-			return 0.8f;
-		}
-	}
-*/	
 	public void registerRecipe() {
 		GameRegistry.addRecipe(new ItemStack(this),
 				" C ",
@@ -268,8 +224,6 @@ public class ItemOreDetector extends Item {
     	if (ticksInUse == 20) {
     		FFLogger.info("ItemOreDetector onUsingTick: playing sound");
     		player.playSound(ModOreDetectors.MODID + ":oreDetectorCharge", 1.0f, 1.0f);
-//			player.worldObj.playSoundAtEntity(player, 
-//					ModOreDetectors.MODID + ":oreDetectorCharge", 1.0f, 1.0f);
     	} else if (ticksInUse == 40) {
 			this.signalBoost = true;
 			stack.damageItem(1, player);
