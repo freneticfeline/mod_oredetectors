@@ -2,10 +2,11 @@ package net.unladenswallow.minecraft.oredetectors;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelBakery;
-import net.minecraft.client.resources.model.ModelResourceLocation;
+import net.minecraft.client.renderer.block.model.ModelBakery;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
@@ -35,9 +36,7 @@ public class ClientProxy extends CommonProxy {
 
     private void registerDetectorWithVariants(ItemOreDetector detector, String itemName) {
         registerItem(detector, itemName);
-        ModelBakery.addVariantName(detector, ModOreDetectors.MODID + ":" + itemName);
-        ModelBakery.addVariantName(detector, ModOreDetectors.MODID + ":" + itemName + "_active");
-		FMLCommonHandler.instance().bus().register(detector);
+        MinecraftForge.EVENT_BUS.register(detector);
 	}
 
 	protected void registerItem(Item item, String name) {

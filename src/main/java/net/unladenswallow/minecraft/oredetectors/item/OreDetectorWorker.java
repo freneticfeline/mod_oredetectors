@@ -3,7 +3,7 @@ package net.unladenswallow.minecraft.oredetectors.item;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.unladenswallow.minecraft.oredetectors.FFLogger;
 

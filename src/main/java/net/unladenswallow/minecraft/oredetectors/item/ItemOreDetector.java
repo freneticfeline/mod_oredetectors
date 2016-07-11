@@ -2,8 +2,8 @@ package net.unladenswallow.minecraft.oredetectors.item;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
@@ -11,7 +11,12 @@ import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
@@ -75,7 +80,7 @@ public class ItemOreDetector extends Item {
 					/* Ping whenever detector is in the inventory, but only exhibit homing
 					 * behavior when the detector is being held
 					 */
-					if (player.getHeldItem() != null && player.getHeldItem().getItem() == this) {
+					if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() == this) {
 						pingFrequency =
 							pingFrequencyFromDirection(player.rotationPitch,
 							player.rotationYaw,
@@ -94,7 +99,7 @@ public class ItemOreDetector extends Item {
 //								+ "\nplayer pitch/yaw = " + player.rotationPitch + " / " + player.rotationYaw
 //								+ "\n\tnearest block pitch/yaw = " + pitchToBlock(player.getPosition().up(), nearestMatchingPos) + " / " + yawToBlock(player.getPosition().up(), nearestMatchingPos)
 //								, event.side);
-						player.playSound(ModOreDetectors.MODID + ":oreDetectorPing", volumeFromDistance(distSq) * 2.0f, 1.0f);
+						player.playSound(new SoundEvent(new ResourceLocation(ModOreDetectors.MODID + ":oreDetectorPing")), volumeFromDistance(distSq) * 2.0f, 1.0f);
 						tickOfLastPing = player.worldObj.getWorldTime();
 						this.currentModel = this.activeModel;
 					}
@@ -198,35 +203,28 @@ public class ItemOreDetector extends Item {
 	}
 	
 	@Override
-    public ModelResourceLocation getModel(ItemStack stack, EntityPlayer player, int useRemaining)
-    {
-//        FFLogger.info("ItemOreDetector getModel(): modelResourcelocation is " + (new ModelResourceLocation(this.currentModel, "inventory")).getResourceDomain() + ":" + (new ModelResourceLocation(this.currentModel, "inventory")).getResourcePath());
-		return new ModelResourceLocation(this.currentModel, "inventory");
-    }
-	
-	@Override
     public int getMaxItemUseDuration(ItemStack stack)
     {
         return 72000;
     }
 
 	@Override
-    public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
+    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
 //    	FFLogger.info("ItemOreDetector onItemRightClick");
-    	playerIn.setItemInUse(itemStackIn, this.getMaxItemUseDuration(itemStackIn));
-    	return itemStackIn;
+        playerIn.setActiveHand(hand);
+    	return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
     }
     
     @Override
-    public void onUsingTick(ItemStack stack, EntityPlayer player, int count)
+    public void onUsingTick(ItemStack stack, EntityLivingBase player, int count)
     {
         if (player.worldObj.isRemote) {
 //            FFLogger.info("ItemOreDetector onUsingTick: count = " + count);
             int ticksInUse = this.getMaxItemUseDuration(stack) - count;
             if (ticksInUse == 20) {
 //                FFLogger.info("ItemOreDetector onUsingTick: playing sound");
-                player.playSound(ModOreDetectors.MODID + ":oreDetectorCharge", 1.0f, 1.0f);
+                player.playSound(new SoundEvent(new ResourceLocation(ModOreDetectors.MODID + ":oreDetectorCharge")), 1.0f, 1.0f);
             } else if (ticksInUse == 40) {
                 this.signalBoost = true;
                 stack.damageItem(1, player);
@@ -235,7 +233,7 @@ public class ItemOreDetector extends Item {
     }
     
     @Override
-    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityPlayer playerIn, int timeLeft) {
+    public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase playerIn, int timeLeft) {
 //    	FFLogger.info("ItemOreDetector onPlayerStoppedUsing");
     	this.signalBoost = false;
     }

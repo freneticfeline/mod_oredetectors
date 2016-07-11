@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.unladenswallow.minecraft.oredetectors.item.ItemOreDetector;
 
 
-@Mod(modid = ModOreDetectors.MODID, useMetadata = true, acceptedMinecraftVersions="[1.8,1.9)", acceptableRemoteVersions="[1.8,1.9)")
+@Mod(modid = ModOreDetectors.MODID, useMetadata = true, acceptedMinecraftVersions="[1.9,1.10)", acceptableRemoteVersions="[1.9,1.10)")
 public class ModOreDetectors {
 
 	public static final String MODID = "mod_oredetectors";
