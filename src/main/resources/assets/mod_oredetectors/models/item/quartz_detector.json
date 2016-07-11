@@ -2,5 +2,14 @@
     "parent":"mod_oredetectors:item/standard_item",
     "textures": {
         "layer0":"mod_oredetectors:items/detector.quartz"
-    }
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "cast": 1
+            },
+            "model": "mod_oredetectors:item/quartz_detector_active"
+        }
+    ]
+    
 }

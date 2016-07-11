@@ -9,13 +9,13 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -23,6 +23,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.unladenswallow.minecraft.oredetectors.ModOreDetectors;
 
 public class ItemOreDetector extends Item {
@@ -41,22 +42,31 @@ public class ItemOreDetector extends Item {
 	private int slotDetectorLastSeen;
 	private long tickOfLastPing = 0;
 	
-	private String baseModel;
-	private String activeModel;
-	private String currentModel;
+	private boolean pingActive = false;
 	private boolean signalBoost = false;
 	
 	public ItemOreDetector(String unlocalizedName, Block oreBlock, Item recipeItem) {
 		super();
 		this.setUnlocalizedName(unlocalizedName);
+	    this.setRegistryName(ModOreDetectors.MODID,unlocalizedName);
 		this.oreBlock = oreBlock;
 		this.recipeItem = recipeItem;
 		this.setCreativeTab(CreativeTabs.tabMisc);
 		this.setMaxDamage(32);
 		this.setMaxStackSize(1);
-		this.baseModel = ModOreDetectors.MODID + ":" + unlocalizedName;
-		this.activeModel = this.baseModel + "_active";
-		this.currentModel = baseModel;
+		
+		/* This is a hack, but I don't know how else to do this in 1.9.
+		 * Abuse the "cast" property and the override in order to render the "active"
+		 * model of the detector at the same time that the ping sound occurs.
+		 */
+        this.addPropertyOverride(new ResourceLocation("cast"), new IItemPropertyGetter()
+        {
+            @SideOnly(Side.CLIENT)
+            public float apply(ItemStack stack, World worldIn, EntityLivingBase entityIn)
+            {
+                return pingActive ? 1.0F : 0.0F;
+            }
+        });
 	}
 	
 	protected Block getOreBlock() {
@@ -73,9 +83,10 @@ public class ItemOreDetector extends Item {
 					&& player.worldObj.getWorldTime() % Math.min(MIN_PING_FREQ, ACTIVE_TICKS) == 0 // No point executing unless we're going to do something
 					&& detectorInInventory(player) ) { // Only if this detector is in the player's inventory
 //			    FFLogger.info("Checking");
-				this.currentModel = this.baseModel;
+			    this.pingActive = false;
 				if (worker != null && worker.hasDetectedBlock()) {
 					BlockPos nearestMatchingPos = worker.getLastFoundBlockPos();
+//                    FFLogger.info("Got block from worker: " + nearestMatchingPos.toString());
 					int pingFrequency = MAX_PING_FREQ;
 					/* Ping whenever detector is in the inventory, but only exhibit homing
 					 * behavior when the detector is being held
@@ -91,7 +102,6 @@ public class ItemOreDetector extends Item {
 //							+ "worldTime = " + player.worldObj.getWorldTime() + "tickOfLastPing = " + tickOfLastPing);
 					if (player.worldObj.getWorldTime() >= tickOfLastPing + pingFrequency) {
 						double distSq = player.getDistanceSqToCenter(nearestMatchingPos);
-//                      FFLogger.info("ItemOreDetector onPlayerTickEvent [%s]: "
 //						FFLogger.info("ItemOreDetector onPlayerTickEvent [%s]: "
 //								+ "\ndistance to nearest ore block = " + distSq
 //								+ "\nvolume = " + volumeFromDistance(distSq)
@@ -99,9 +109,9 @@ public class ItemOreDetector extends Item {
 //								+ "\nplayer pitch/yaw = " + player.rotationPitch + " / " + player.rotationYaw
 //								+ "\n\tnearest block pitch/yaw = " + pitchToBlock(player.getPosition().up(), nearestMatchingPos) + " / " + yawToBlock(player.getPosition().up(), nearestMatchingPos)
 //								, event.side);
-						player.playSound(new SoundEvent(new ResourceLocation(ModOreDetectors.MODID + ":oreDetectorPing")), volumeFromDistance(distSq) * 2.0f, 1.0f);
+						player.playSound(ModOreDetectors.pingSoundEvent, volumeFromDistance(distSq) * 2.0f, 1.0f);
 						tickOfLastPing = player.worldObj.getWorldTime();
-						this.currentModel = this.activeModel;
+						this.pingActive = true;
 					}
 				}
 				/* To keep from bogging down the game, we only actually search for a block every few seconds.
@@ -224,7 +234,7 @@ public class ItemOreDetector extends Item {
             int ticksInUse = this.getMaxItemUseDuration(stack) - count;
             if (ticksInUse == 20) {
 //                FFLogger.info("ItemOreDetector onUsingTick: playing sound");
-                player.playSound(new SoundEvent(new ResourceLocation(ModOreDetectors.MODID + ":oreDetectorCharge")), 1.0f, 1.0f);
+                player.playSound(ModOreDetectors.chargeSoundEvent, 1.0f, 1.0f);
             } else if (ticksInUse == 40) {
                 this.signalBoost = true;
                 stack.damageItem(1, player);

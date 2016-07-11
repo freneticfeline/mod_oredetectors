@@ -3,6 +3,8 @@ package net.unladenswallow.minecraft.oredetectors;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -29,6 +31,9 @@ public class ModOreDetectors {
 	public static ItemOreDetector quartzDetector;
 //	public static ItemOreDetector ironBarsDetector;
 	
+	public static SoundEvent pingSoundEvent;
+	public static SoundEvent chargeSoundEvent;
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent preInitEvent) {
 		ModOreDetectors.proxy.preInit(preInitEvent);
@@ -42,16 +47,20 @@ public class ModOreDetectors {
 		quartzDetector = new ItemOreDetector("quartz_detector", Blocks.quartz_ore, Items.quartz);
 //		ironBarsDetector = new ItemOreDetector("ironbar_detector", Blocks.iron_bars, Item.getItemFromBlock(Blocks.iron_bars));
 		
+        pingSoundEvent = new SoundEvent(new ResourceLocation(MODID, "oreDetectorPing")).setRegistryName(MODID + ":oreDetectorPing");
+        chargeSoundEvent = new SoundEvent(new ResourceLocation(MODID, "oreDetectorCharge")).setRegistryName(MODID + ":oreDetectorCharge");
 		
-		GameRegistry.registerItem(diamondDetector, "diamond_detector");
-		GameRegistry.registerItem(emeraldDetector, "emerald_detector");
-		GameRegistry.registerItem(redstoneDetector, "redstone_detector");
-		GameRegistry.registerItem(goldDetector, "gold_detector");
-		GameRegistry.registerItem(lapisDetector, "lapis_detector");
-		GameRegistry.registerItem(ironDetector, "iron_detector");
-		GameRegistry.registerItem(quartzDetector, "quartz_detector");
-//		GameRegistry.registerItem(ironBarsDetector, "ironbar_detector");
+		GameRegistry.register(diamondDetector);
+		GameRegistry.register(emeraldDetector);
+		GameRegistry.register(redstoneDetector);
+		GameRegistry.register(goldDetector);
+		GameRegistry.register(lapisDetector);
+		GameRegistry.register(ironDetector);
+		GameRegistry.register(quartzDetector);
+//		GameRegistry.register(ironBarsDetector);
 
+		GameRegistry.register(pingSoundEvent);
+        GameRegistry.register(chargeSoundEvent);
 	}
 	
 	@EventHandler

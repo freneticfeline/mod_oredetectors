@@ -2,5 +2,14 @@
     "parent":"mod_oredetectors:item/standard_item",
     "textures": {
         "layer0":"mod_oredetectors:items/detector.redstone"
-    }
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "cast": 1
+            },
+            "model": "mod_oredetectors:item/redstone_detector_active"
+        }
+    ]
+    
 }

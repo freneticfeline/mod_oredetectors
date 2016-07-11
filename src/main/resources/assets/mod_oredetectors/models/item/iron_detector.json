@@ -2,5 +2,14 @@
     "parent":"mod_oredetectors:item/standard_item",
     "textures": {
         "layer0":"mod_oredetectors:items/detector.iron"
-    }
+    },
+    "overrides": [
+        {
+            "predicate": {
+                "cast": 1
+            },
+            "model": "mod_oredetectors:item/iron_detector_active"
+        }
+    ]
+    
 }

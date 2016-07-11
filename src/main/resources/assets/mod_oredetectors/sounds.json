@@ -1,4 +1,4 @@
 {
-	"oreDetectorPing" : {"category" : "player", "sounds": [ "ping" ] },
-	"oreDetectorCharge" : {"category" : "player", "sounds": [ "charge" ] }
+	"oreDetectorPing" : {"category" : "player", "sounds": [ "mod_oredetectors:ping" ] },
+	"oreDetectorCharge" : {"category" : "player", "sounds": [ "mod_oredetectors:charge" ] }
 }
