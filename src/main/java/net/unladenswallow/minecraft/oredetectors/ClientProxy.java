@@ -29,7 +29,7 @@ public class ClientProxy extends CommonProxy {
         registerDetectorWithVariants(ModOreDetectors.lapisDetector, "lapis_detector");
         registerDetectorWithVariants(ModOreDetectors.ironDetector, "iron_detector");
         registerDetectorWithVariants(ModOreDetectors.quartzDetector, "quartz_detector");
-        registerDetectorWithVariants(ModOreDetectors.ironBarsDetector, "ironbar_detector");
+//        registerDetectorWithVariants(ModOreDetectors.ironBarsDetector, "ironbar_detector");
 
     }
 

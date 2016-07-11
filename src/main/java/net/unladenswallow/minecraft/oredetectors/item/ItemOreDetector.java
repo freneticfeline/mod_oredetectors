@@ -18,7 +18,6 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
-import net.unladenswallow.minecraft.oredetectors.FFLogger;
 import net.unladenswallow.minecraft.oredetectors.ModOreDetectors;
 
 public class ItemOreDetector extends Item {
@@ -48,7 +47,8 @@ public class ItemOreDetector extends Item {
 		this.oreBlock = oreBlock;
 		this.recipeItem = recipeItem;
 		this.setCreativeTab(CreativeTabs.tabMisc);
-		this.setMaxDamage(64);
+		this.setMaxDamage(32);
+		this.setMaxStackSize(1);
 		this.baseModel = ModOreDetectors.MODID + ":" + unlocalizedName;
 		this.activeModel = this.baseModel + "_active";
 		this.currentModel = baseModel;
@@ -67,6 +67,7 @@ public class ItemOreDetector extends Item {
 					&& event.phase == Phase.END // We don't want to trigger twice per tick
 					&& player.worldObj.getWorldTime() % Math.min(MIN_PING_FREQ, ACTIVE_TICKS) == 0 // No point executing unless we're going to do something
 					&& detectorInInventory(player) ) { // Only if this detector is in the player's inventory
+//			    FFLogger.info("Checking");
 				this.currentModel = this.baseModel;
 				if (worker != null && worker.hasDetectedBlock()) {
 					BlockPos nearestMatchingPos = worker.getLastFoundBlockPos();
@@ -85,6 +86,7 @@ public class ItemOreDetector extends Item {
 //							+ "worldTime = " + player.worldObj.getWorldTime() + "tickOfLastPing = " + tickOfLastPing);
 					if (player.worldObj.getWorldTime() >= tickOfLastPing + pingFrequency) {
 						double distSq = player.getDistanceSqToCenter(nearestMatchingPos);
+//                      FFLogger.info("ItemOreDetector onPlayerTickEvent [%s]: "
 //						FFLogger.info("ItemOreDetector onPlayerTickEvent [%s]: "
 //								+ "\ndistance to nearest ore block = " + distSq
 //								+ "\nvolume = " + volumeFromDistance(distSq)
@@ -173,13 +175,13 @@ public class ItemOreDetector extends Item {
 	}
 
 	private float volumeFromDistance(double distanceSq) {
-		/* The volume should be max (1.0) within 1 block of the target block, then drop to minimum (0.05) by
-		 * the time we are about a third of the search radius away from the target block, and remain at minimum
+		/* The volume should be max (1.0) within 1 block of the target block, then drop to minimum (0.1) by
+		 * the time we are about half of the search radius away from the target block, and remain at minimum
 		 * until the block is no longer detected. 
 		 */
 		return Math.min(1.0f, // Make sure it never goes over 1.0
 						Math.max(0.1f, // Make sure it never goes under 0.1
-								 1.0f - (Math.min((float)DETECT_BLOCK_RADIUS, (float)(Math.sqrt(distanceSq)) - 1.0f) / 10) // Min volume by 11 blocks away
+								 1.0f - (Math.min((float)DETECT_BLOCK_RADIUS, (float)(Math.sqrt(distanceSq)) - 3.0f) / 15) // Min volume by 18 blocks away
 								)
 						);
 	}
@@ -219,15 +221,17 @@ public class ItemOreDetector extends Item {
     @Override
     public void onUsingTick(ItemStack stack, EntityPlayer player, int count)
     {
-//    	FFLogger.info("ItemOreDetector onUsingTick: count = " + count);
-    	int ticksInUse = this.getMaxItemUseDuration(stack) - count;
-    	if (ticksInUse == 20) {
-    		FFLogger.info("ItemOreDetector onUsingTick: playing sound");
-    		player.playSound(ModOreDetectors.MODID + ":oreDetectorCharge", 1.0f, 1.0f);
-    	} else if (ticksInUse == 40) {
-			this.signalBoost = true;
-			stack.damageItem(1, player);
-    	}
+        if (player.worldObj.isRemote) {
+//            FFLogger.info("ItemOreDetector onUsingTick: count = " + count);
+            int ticksInUse = this.getMaxItemUseDuration(stack) - count;
+            if (ticksInUse == 20) {
+//                FFLogger.info("ItemOreDetector onUsingTick: playing sound");
+                player.playSound(ModOreDetectors.MODID + ":oreDetectorCharge", 1.0f, 1.0f);
+            } else if (ticksInUse == 40) {
+                this.signalBoost = true;
+                stack.damageItem(1, player);
+            }
+        }
     }
     
     @Override

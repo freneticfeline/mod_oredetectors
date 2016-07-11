@@ -27,7 +27,7 @@ public class ModOreDetectors {
 	public static ItemOreDetector lapisDetector;
 	public static ItemOreDetector ironDetector;
 	public static ItemOreDetector quartzDetector;
-	public static ItemOreDetector ironBarsDetector;
+//	public static ItemOreDetector ironBarsDetector;
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent preInitEvent) {
@@ -40,7 +40,7 @@ public class ModOreDetectors {
 		lapisDetector = new ItemOreDetector("lapis_detector", Blocks.lapis_ore, Item.getItemFromBlock(Blocks.lapis_block));
 		ironDetector = new ItemOreDetector("iron_detector", Blocks.iron_ore, Items.iron_ingot);
 		quartzDetector = new ItemOreDetector("quartz_detector", Blocks.quartz_ore, Items.quartz);
-		ironBarsDetector = new ItemOreDetector("ironbar_detector", Blocks.iron_bars, Item.getItemFromBlock(Blocks.iron_bars));
+//		ironBarsDetector = new ItemOreDetector("ironbar_detector", Blocks.iron_bars, Item.getItemFromBlock(Blocks.iron_bars));
 		
 		
 		GameRegistry.registerItem(diamondDetector, "diamond_detector");
@@ -50,7 +50,7 @@ public class ModOreDetectors {
 		GameRegistry.registerItem(lapisDetector, "lapis_detector");
 		GameRegistry.registerItem(ironDetector, "iron_detector");
 		GameRegistry.registerItem(quartzDetector, "quartz_detector");
-		GameRegistry.registerItem(ironBarsDetector, "ironbar_detector");
+//		GameRegistry.registerItem(ironBarsDetector, "ironbar_detector");
 
 	}
 	

@@ -1,7 +1,7 @@
 item.diamond_detector.name=Diamond Detector
-item.emeraldDetector.name=Emerald Detector
-item.redstoneDetector.name=Redstone Detector
-item.goldDetector.name=Gold Detector
-item.lapisDetector.name=Lapis Detector
-item.ironDetector.name=Iron Detector
-item.quartzDetector.name=Quartz Detector
+item.emerald_detector.name=Emerald Detector
+item.redstone_detector.name=Redstone Detector
+item.gold_detector.name=Gold Detector
+item.lapis_detector.name=Lapis Detector
+item.iron_detector.name=Iron Detector
+item.quartz_detector.name=Quartz Detector
