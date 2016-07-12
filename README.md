@@ -3,13 +3,11 @@
 OreDetectors Mod is a Minecraft mod that provides new items for detecting ore blocks.
 
 ## Installation Requirements
-OreDetectors Mod versions 1.8-x.x require Minecraft 1.8 or 1.8.9 with compatible version
-of MinecraftForge installed.
-OreDetectors Mod versions 1.9-x.x require Minecraft 1.9 or 1.9.4 with compatible version
+OreDetectors Mod versions 1.x-y.z require Minecraft 1.x with compatible version
 of MinecraftForge installed.
 
 ## Installation Instructions
-Copy the `mod_ffOreDetectors_forge-1.8-x.x.jar` file to the `mods` directory in your Minecraft
+Copy the `mod_ffOreDetectors_forge-1.x-y.z.jar` file to the `mods` directory in your Minecraft
 data directory.
 
 ## Usage Instructions
