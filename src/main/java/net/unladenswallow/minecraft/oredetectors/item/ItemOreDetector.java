@@ -51,7 +51,7 @@ public class ItemOreDetector extends Item {
 	    this.setRegistryName(ModOreDetectors.MODID,unlocalizedName);
 		this.oreBlock = oreBlock;
 		this.recipeItem = recipeItem;
-		this.setCreativeTab(CreativeTabs.tabMisc);
+		this.setCreativeTab(CreativeTabs.MISC);
 		this.setMaxDamage(32);
 		this.setMaxStackSize(1);
 		
@@ -207,9 +207,9 @@ public class ItemOreDetector extends Item {
 				"RIR",
 				" D ",
 				'D', this.recipeItem,
-				'C', Items.compass,
-				'I', Blocks.iron_block,
-				'R', Items.repeater);
+				'C', Items.COMPASS,
+				'I', Blocks.IRON_BLOCK,
+				'R', Items.REPEATER);
 	}
 	
 	@Override

@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.unladenswallow.minecraft.oredetectors.item.ItemOreDetector;
 
 
-@Mod(modid = ModOreDetectors.MODID, useMetadata = true, acceptedMinecraftVersions="[1.9,1.10)", acceptableRemoteVersions="[1.9,1.10)")
+@Mod(modid = ModOreDetectors.MODID, useMetadata = true, acceptedMinecraftVersions="[1.10,1.11)", acceptableRemoteVersions="[1.10,1.11)")
 public class ModOreDetectors {
 
 	public static final String MODID = "mod_oredetectors";
@@ -38,13 +38,13 @@ public class ModOreDetectors {
 	public void preInit(FMLPreInitializationEvent preInitEvent) {
 		ModOreDetectors.proxy.preInit(preInitEvent);
 		
-		diamondDetector = new ItemOreDetector("diamond_detector", Blocks.diamond_ore, Items.diamond);
-		emeraldDetector = new ItemOreDetector("emerald_detector", Blocks.emerald_ore, Items.emerald);
-		redstoneDetector = new ItemOreDetector("redstone_detector", Blocks.redstone_ore, Items.redstone);
-		goldDetector = new ItemOreDetector("gold_detector", Blocks.gold_ore, Items.gold_ingot);
-		lapisDetector = new ItemOreDetector("lapis_detector", Blocks.lapis_ore, Item.getItemFromBlock(Blocks.lapis_block));
-		ironDetector = new ItemOreDetector("iron_detector", Blocks.iron_ore, Items.iron_ingot);
-		quartzDetector = new ItemOreDetector("quartz_detector", Blocks.quartz_ore, Items.quartz);
+		diamondDetector = new ItemOreDetector("diamond_detector", Blocks.DIAMOND_ORE, Items.DIAMOND);
+		emeraldDetector = new ItemOreDetector("emerald_detector", Blocks.EMERALD_ORE, Items.EMERALD);
+		redstoneDetector = new ItemOreDetector("redstone_detector", Blocks.REDSTONE_ORE, Items.REDSTONE);
+		goldDetector = new ItemOreDetector("gold_detector", Blocks.GOLD_ORE, Items.GOLD_INGOT);
+		lapisDetector = new ItemOreDetector("lapis_detector", Blocks.LAPIS_ORE, Item.getItemFromBlock(Blocks.LAPIS_BLOCK));
+		ironDetector = new ItemOreDetector("iron_detector", Blocks.IRON_ORE, Items.IRON_INGOT);
+		quartzDetector = new ItemOreDetector("quartz_detector", Blocks.QUARTZ_ORE, Items.QUARTZ);
 //		ironBarsDetector = new ItemOreDetector("ironbar_detector", Blocks.iron_bars, Item.getItemFromBlock(Blocks.iron_bars));
 		
         pingSoundEvent = new SoundEvent(new ResourceLocation(MODID, "oreDetectorPing")).setRegistryName(MODID + ":oreDetectorPing");
