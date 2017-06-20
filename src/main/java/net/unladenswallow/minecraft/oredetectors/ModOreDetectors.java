@@ -14,7 +14,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.unladenswallow.minecraft.oredetectors.item.ItemOreDetector;
 
 
-@Mod(modid = ModOreDetectors.MODID, useMetadata = true, acceptedMinecraftVersions="[1.10,1.11)", acceptableRemoteVersions="[1.10,1.11)")
+@Mod(modid = ModOreDetectors.MODID, useMetadata = true, acceptedMinecraftVersions="[1.11,1.12)", acceptableRemoteVersions="[1.11,1.12)")
 public class ModOreDetectors {
 
 	public static final String MODID = "mod_oredetectors";

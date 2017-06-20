@@ -48,7 +48,7 @@ public class OreDetectorWorker implements Runnable {
 	 */
 	public BlockPos find() {
 //		FFLogger.info("OreDetectorWorker find: searching radius / height " + this.searchRadius + "/" + this.searchHeight);
-		World world = Minecraft.getMinecraft().theWorld;
+		World world = Minecraft.getMinecraft().world;
 		BlockPos nearest = null;
 		int startX = startPos.getX();
 		int startY = startPos.getY();

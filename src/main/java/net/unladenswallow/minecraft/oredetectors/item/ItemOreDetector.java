@@ -80,7 +80,7 @@ public class ItemOreDetector extends Item {
 			EntityPlayer player = event.player;
 			if (!minecraft.isGamePaused() && player != null // Is a game actually in progress?
 					&& event.phase == Phase.END // We don't want to trigger twice per tick
-					&& player.worldObj.getWorldTime() % Math.min(MIN_PING_FREQ, ACTIVE_TICKS) == 0 // No point executing unless we're going to do something
+					&& player.world.getWorldTime() % Math.min(MIN_PING_FREQ, ACTIVE_TICKS) == 0 // No point executing unless we're going to do something
 					&& detectorInInventory(player) ) { // Only if this detector is in the player's inventory
 //			    FFLogger.info("Checking");
 			    this.pingActive = false;
@@ -100,7 +100,7 @@ public class ItemOreDetector extends Item {
 					}
 //					FFLogger.info("ItemOreDetector onPlayerTickEvent: pingFrequency = " + pingFrequency
 //							+ "worldTime = " + player.worldObj.getWorldTime() + "tickOfLastPing = " + tickOfLastPing);
-					if (player.worldObj.getWorldTime() >= tickOfLastPing + pingFrequency) {
+					if (player.world.getWorldTime() >= tickOfLastPing + pingFrequency) {
 						double distSq = player.getDistanceSqToCenter(nearestMatchingPos);
 //						FFLogger.info("ItemOreDetector onPlayerTickEvent [%s]: "
 //								+ "\ndistance to nearest ore block = " + distSq
@@ -110,14 +110,14 @@ public class ItemOreDetector extends Item {
 //								+ "\n\tnearest block pitch/yaw = " + pitchToBlock(player.getPosition().up(), nearestMatchingPos) + " / " + yawToBlock(player.getPosition().up(), nearestMatchingPos)
 //								, event.side);
 						player.playSound(ModOreDetectors.pingSoundEvent, volumeFromDistance(distSq) * 2.0f, 1.0f);
-						tickOfLastPing = player.worldObj.getWorldTime();
+						tickOfLastPing = player.world.getWorldTime();
 						this.pingActive = true;
 					}
 				}
 				/* To keep from bogging down the game, we only actually search for a block every few seconds.
 				 * (We'll just keep pinging based on the last block that we found.) 
 				 */
-				if (player.worldObj.getWorldTime() % (MIN_PING_FREQ * 5) == 0  
+				if (player.world.getWorldTime() % (MIN_PING_FREQ * 5) == 0  
 						&& (worker == null || !worker.isWorking())) {
 					int search_radius = this.signalBoost ? BOOST_BLOCK_RADIUS : DETECT_BLOCK_RADIUS;
 					int search_height = this.signalBoost ? BOOST_BLOCK_HEIGHT : DETECT_BLOCK_HEIGHT;
@@ -160,12 +160,12 @@ public class ItemOreDetector extends Item {
 	private boolean detectorInInventory(EntityPlayer player) {
 		InventoryPlayer inventory = player.inventory;
 		// To save time, first check the last place we saw a detector
-		if (inventory.mainInventory[slotDetectorLastSeen] != null && inventory.mainInventory[slotDetectorLastSeen].getItem() == this) {
+		if (inventory.mainInventory.get(slotDetectorLastSeen) != null && inventory.mainInventory.get(slotDetectorLastSeen).getItem() == this) {
 //			FFLogger.info("Found detector in the last place we saw it");
 			return true;
 		}
-		for (int i = 0; i < inventory.mainInventory.length; i++) {
-			ItemStack curItemStack = inventory.mainInventory[i];
+		for (int i = 0; i < inventory.mainInventory.size(); i++) {
+			ItemStack curItemStack = inventory.mainInventory.get(i);
 			if (curItemStack != null && curItemStack.getItem() == this) {
 				slotDetectorLastSeen = i;
 //				FFLogger.info("Found detector in slot " + i);
@@ -219,17 +219,17 @@ public class ItemOreDetector extends Item {
     }
 
 	@Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+    public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand hand)
     {
 //    	FFLogger.info("ItemOreDetector onItemRightClick");
         playerIn.setActiveHand(hand);
-    	return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, itemStackIn);
+    	return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, playerIn.getHeldItem(hand));
     }
     
     @Override
     public void onUsingTick(ItemStack stack, EntityLivingBase player, int count)
     {
-        if (player.worldObj.isRemote) {
+        if (player.world.isRemote) {
 //            FFLogger.info("ItemOreDetector onUsingTick: count = " + count);
             int ticksInUse = this.getMaxItemUseDuration(stack) - count;
             if (ticksInUse == 20) {
