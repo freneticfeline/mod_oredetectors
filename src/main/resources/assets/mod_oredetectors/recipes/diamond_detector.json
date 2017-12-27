@@ -1,0 +1,26 @@
+{
+    "type": "minecraft:crafting_shaped",
+    "pattern": [
+        " C ",
+        "RIR",
+        " D "
+    ],
+    "key": {
+        "C": {
+            "item": "minecraft:compass"
+        },
+        "R": {
+            "item": "minecraft:repeater"
+        },
+        "I": {
+            "item": "minecraft:iron_block"
+        },
+        "D": {
+            "item": "minecraft:diamond"
+        }
+    },
+    "result": {
+        "item": "mod_oredetectors:diamond_detector",
+        "data": 0
+    }
+}

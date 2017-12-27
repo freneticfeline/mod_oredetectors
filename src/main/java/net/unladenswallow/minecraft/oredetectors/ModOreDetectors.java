@@ -5,16 +5,18 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.unladenswallow.minecraft.oredetectors.item.ItemOreDetector;
 
 
-@Mod(modid = ModOreDetectors.MODID, useMetadata = true, acceptedMinecraftVersions="[1.11,1.12)", acceptableRemoteVersions="[1.11,1.12)")
+@Mod(modid = ModOreDetectors.MODID, useMetadata = true, acceptedMinecraftVersions="[1.12,1.13)", acceptableRemoteVersions="[1.12,1.13)")
 public class ModOreDetectors {
 
 	public static final String MODID = "mod_oredetectors";
@@ -36,6 +38,7 @@ public class ModOreDetectors {
 	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent preInitEvent) {
+	    MinecraftForge.EVENT_BUS.register(this);
 		ModOreDetectors.proxy.preInit(preInitEvent);
 		
 		diamondDetector = new ItemOreDetector("diamond_detector", Blocks.DIAMOND_ORE, Items.DIAMOND);
@@ -50,36 +53,25 @@ public class ModOreDetectors {
         pingSoundEvent = new SoundEvent(new ResourceLocation(MODID, "oreDetectorPing")).setRegistryName(MODID + ":oreDetectorPing");
         chargeSoundEvent = new SoundEvent(new ResourceLocation(MODID, "oreDetectorCharge")).setRegistryName(MODID + ":oreDetectorCharge");
 		
-		GameRegistry.register(diamondDetector);
-		GameRegistry.register(emeraldDetector);
-		GameRegistry.register(redstoneDetector);
-		GameRegistry.register(goldDetector);
-		GameRegistry.register(lapisDetector);
-		GameRegistry.register(ironDetector);
-		GameRegistry.register(quartzDetector);
-//		GameRegistry.register(ironBarsDetector);
-
-		GameRegistry.register(pingSoundEvent);
-        GameRegistry.register(chargeSoundEvent);
+	}
+	
+	@SubscribeEvent
+	public void registerItems(RegistryEvent.Register<Item> event) {
+	    event.getRegistry().registerAll(diamondDetector, emeraldDetector, redstoneDetector,
+	            goldDetector, lapisDetector, ironDetector, quartzDetector);
+	}
+	
+	@SubscribeEvent
+	public void registerSounds(RegistryEvent.Register<SoundEvent> event) {
+	    event.getRegistry().registerAll(pingSoundEvent, chargeSoundEvent);
 	}
 	
 	@EventHandler
 	public void init (FMLInitializationEvent event) {
 		ModOreDetectors.proxy.init(event);
 		FFLogger.info("Initializing " + ModOreDetectors.MODID);
-		addRecipes();
 		addSmelting();
 	}
-	
-	private void addRecipes() {
-		diamondDetector.registerRecipe();
-		emeraldDetector.registerRecipe();
-		redstoneDetector.registerRecipe();
-		goldDetector.registerRecipe();
-		lapisDetector.registerRecipe();
-		ironDetector.registerRecipe();
-		quartzDetector.registerRecipe();
-}
 	
 	private void addSmelting() {
 	}

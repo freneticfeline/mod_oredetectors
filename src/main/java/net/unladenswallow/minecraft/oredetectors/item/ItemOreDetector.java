@@ -6,8 +6,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.IItemPropertyGetter;
 import net.minecraft.item.Item;
@@ -19,9 +17,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.common.gameevent.TickEvent.PlayerTickEvent;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.unladenswallow.minecraft.oredetectors.ModOreDetectors;
@@ -74,10 +71,10 @@ public class ItemOreDetector extends Item {
 	}
 	
 	@SubscribeEvent
-	public void onPlayerTickEvent(PlayerTickEvent event) {
+	public void onClientTickEvent(ClientTickEvent event) {
 		if (event.side == Side.CLIENT) {
 			Minecraft minecraft = Minecraft.getMinecraft();
-			EntityPlayer player = event.player;
+			EntityPlayer player = minecraft.player;
 			if (!minecraft.isGamePaused() && player != null // Is a game actually in progress?
 					&& event.phase == Phase.END // We don't want to trigger twice per tick
 					&& player.world.getWorldTime() % Math.min(MIN_PING_FREQ, ACTIVE_TICKS) == 0 // No point executing unless we're going to do something
@@ -109,6 +106,7 @@ public class ItemOreDetector extends Item {
 //								+ "\nplayer pitch/yaw = " + player.rotationPitch + " / " + player.rotationYaw
 //								+ "\n\tnearest block pitch/yaw = " + pitchToBlock(player.getPosition().up(), nearestMatchingPos) + " / " + yawToBlock(player.getPosition().up(), nearestMatchingPos)
 //								, event.side);
+//						FFLogger.info("Playing sound at player %s at volume %f", player.getDisplayNameString(), volumeFromDistance(distSq) * 2.0f);
 						player.playSound(ModOreDetectors.pingSoundEvent, volumeFromDistance(distSq) * 2.0f, 1.0f);
 						tickOfLastPing = player.world.getWorldTime();
 						this.pingActive = true;
@@ -201,8 +199,9 @@ public class ItemOreDetector extends Item {
 						);
 	}
 
-	public void registerRecipe() {
-		GameRegistry.addRecipe(new ItemStack(this),
+/*	public void registerRecipe() {
+		GameRegistry.addShapedRecipe(this.getRegistryName(), new ResourceLocation(""),
+		        new ItemStack(this),
 				" C ",
 				"RIR",
 				" D ",
@@ -211,7 +210,7 @@ public class ItemOreDetector extends Item {
 				'I', Blocks.IRON_BLOCK,
 				'R', Items.REPEATER);
 	}
-	
+*/	
 	@Override
     public int getMaxItemUseDuration(ItemStack stack)
     {
